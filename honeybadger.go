@@ -111,8 +111,8 @@ type Fault struct {
 	ProjectId     int    `json:"project_id"`
 	Klass         string `json:"klass"`
 	Component     string `json:"component"`
-	Action        string `json:"string"`
-	Env           string `json:"string"`
+	Action        string `json:"action"`
+	Env           string `json:"environment"`
 	Resolved      bool   `json:"resolved"`
 	Ignored       bool   `json:"ignored"`
 	CommentsCount int    `json:"comments_count"`
