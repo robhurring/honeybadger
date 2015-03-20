@@ -10,7 +10,6 @@ import (
 
 func main() {
 	token := os.Getenv("TOKEN")
-	// projectId, _ := strconv.Atoi(os.Getenv("ID"))
 
 	honeybadger := honeybadger.New(token)
 	results, err := honeybadger.Projects()
@@ -18,8 +17,9 @@ func main() {
 		panic(err)
 	}
 
-	// debug(results)
 	fmt.Printf("You have %d projects in honeybadger!\n", len(results.Results))
+
+	debug(results)
 }
 
 func debug(obj ...interface{}) {
