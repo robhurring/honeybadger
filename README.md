@@ -33,20 +33,41 @@
 
 A small, lightweight honeybadger API mapping for Golang. This was mapped against the [V1 API](https://www.honeybadger.io/documentation/read_api), so YMMV.
 
+## Installing
+
+`go get github.com/robhurring/honeybadger`
+
 ## Example Usage
 
 ```go
-// get your token on the https://app.honeybadger.io/users/edit page
-token := os.Getenv("HONEYBADGER_API_TOKEN")
-honeybadger := honeybadger.New(token)
+package main
 
-projects, err := honeybadger.Projects()
-if err != nil {
-  panic(err)
+import (
+  "fmt"
+  "os"
+
+  "github.com/robhurring/honeybadger"
+)
+
+func main() {
+  // get your token on the https://app.honeybadger.io/users/edit page
+  token := os.Getenv("HONEYBADGER_API_TOKEN")
+  honeybadger := honeybadger.New(token)
+
+  projects, err := honeybadger.Projects()
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Printf("You have %d projects in honeybadger!\n", len(projects.Results))
 }
 
-fmt.Printf("You have %d projects in honeybadger!\n", len(projects.Results))
+// HONEYBADGER_API_TOKEN=<my-token> go run main.go
 ```
+
+## To-Do
+
+1. Implement pagination
 
 ## API Documentation
 

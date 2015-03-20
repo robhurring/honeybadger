@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 
@@ -9,20 +8,14 @@ import (
 )
 
 func main() {
-	token := os.Getenv("TOKEN")
-
+	// get your token on the https://app.honeybadger.io/users/edit page
+	token := os.Getenv("HONEYBADGER_API_TOKEN")
 	honeybadger := honeybadger.New(token)
-	results, err := honeybadger.Projects()
+
+	projects, err := honeybadger.Projects()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("You have %d projects in honeybadger!\n", len(results.Results))
-
-	debug(results)
-}
-
-func debug(obj ...interface{}) {
-	data, _ := json.Marshal(obj)
-	fmt.Println(string(data))
+	fmt.Printf("You have %d projects in honeybadger!\n", len(projects.Results))
 }
