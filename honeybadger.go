@@ -278,7 +278,7 @@ func (h *Honeybadger) FaultNotices(projectId, faultId int) (result *FaultNotices
 	return
 }
 
-func debug(obj ...interface{}) {
+func debug(obj interface{}) {
 	data, _ := json.Marshal(obj)
 	fmt.Println(string(data))
 }
