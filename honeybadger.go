@@ -170,17 +170,15 @@ func (p Params) Query() string {
 }
 
 func New(authToken string) *Honeybadger {
-	client := &http.Client{}
-
 	return &Honeybadger{
 		BaseUrl:    "https://api.honeybadger.io",
 		ApiVersion: "v1",
 		Token:      authToken,
-		Client:     client,
+		Client:     &http.Client{},
 	}
 }
 
-func (h *Honeybadger) buildAndExecRequest(method string, path string, params Params) []byte {
+func (h *Honeybadger) get(path string, params Params, response interface{}) (err error) {
 	requestParams := Params{"auth_token": h.Token}
 
 	if params != nil {
@@ -192,118 +190,90 @@ func (h *Honeybadger) buildAndExecRequest(method string, path string, params Par
 	url := h.BaseUrl + "/" + h.ApiVersion + path
 	url += "?" + requestParams.Query()
 
-	req, err := http.NewRequest(method, url, nil)
-	if err != nil {
-		panic("Error while building honeybadger request")
-	}
-
+	req, err := http.NewRequest("GET", url, nil)
 	resp, err := h.Client.Do(req)
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("%s", err)
-	}
+	data, err := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(data, response)
 
-	return contents
+	return
 }
 
 func (h *Honeybadger) Projects() (result *Projects, err error) {
-	path := "/projects"
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Projects{}
-	err = json.Unmarshal(data, result)
-
+	err = h.get("/projects", nil, result)
 	return
 }
 
 func (h *Honeybadger) Project(projectId int) (result *Project, err error) {
 	path := fmt.Sprintf("/projects/%d", projectId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Project{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) Teams() (result *Teams, err error) {
 	path := "/teams"
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Teams{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) Team(teamId int) (result *Team, err error) {
 	path := fmt.Sprintf("/teams/%d", teamId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Team{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) TeamInvitations(teamId int) (result *TeamInvitations, err error) {
 	path := fmt.Sprintf("/teams/%d/team_invitations", teamId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &TeamInvitations{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) TeamInvitation(teamId, teamInvitationId int) (result *TeamInvitation, err error) {
 	path := fmt.Sprintf("/teams/%d/team_invitations/%d", teamId, teamInvitationId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &TeamInvitation{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) Deploys(projectId int) (result *Deploys, err error) {
 	path := fmt.Sprintf("/projects/%d/deploys", projectId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Deploys{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) Faults(projectId int) (result *Faults, err error) {
 	path := fmt.Sprintf("/projects/%d/faults", projectId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Faults{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) Fault(projectId, faultId int) (result *Fault, err error) {
 	path := fmt.Sprintf("/projects/%d/faults/%d", projectId, faultId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &Fault{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
 
 func (h *Honeybadger) FaultNotices(projectId, faultId int) (result *FaultNotices, err error) {
 	path := fmt.Sprintf("/projects/%d/faults/%d/notices", projectId, faultId)
-	data := h.buildAndExecRequest("GET", path, nil)
-
 	result = &FaultNotices{}
-	err = json.Unmarshal(data, result)
+	err = h.get(path, nil, result)
 
 	return
 }
