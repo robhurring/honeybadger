@@ -117,7 +117,7 @@ type Fault struct {
 	Ignored       bool   `json:"ignored"`
 	CommentsCount int    `json:"comments_count"`
 	Message       string `json:"message"`
-	NoticesCount  int    `json:"notice_count"`
+	NoticesCount  int    `json:"notices_count"`
 	Tags          []string
 	Assignee      string     `json:"assignee"`
 	CreatedAt     *time.Time `json:"created_at"`
@@ -200,9 +200,9 @@ func (h *Honeybadger) get(path string, params Params, response interface{}) (err
 	return
 }
 
-func (h *Honeybadger) Projects() (result *Projects, err error) {
+func (h *Honeybadger) Projects(params Params) (result *Projects, err error) {
 	result = &Projects{}
-	err = h.get("/projects", nil, result)
+	err = h.get("/projects", params, result)
 	return
 }
 
@@ -214,10 +214,10 @@ func (h *Honeybadger) Project(projectId int) (result *Project, err error) {
 	return
 }
 
-func (h *Honeybadger) Teams() (result *Teams, err error) {
+func (h *Honeybadger) Teams(params Params) (result *Teams, err error) {
 	path := "/teams"
 	result = &Teams{}
-	err = h.get(path, nil, result)
+	err = h.get(path, params, result)
 
 	return
 }
@@ -230,10 +230,10 @@ func (h *Honeybadger) Team(teamId int) (result *Team, err error) {
 	return
 }
 
-func (h *Honeybadger) TeamInvitations(teamId int) (result *TeamInvitations, err error) {
+func (h *Honeybadger) TeamInvitations(teamId int, params Params) (result *TeamInvitations, err error) {
 	path := fmt.Sprintf("/teams/%d/team_invitations", teamId)
 	result = &TeamInvitations{}
-	err = h.get(path, nil, result)
+	err = h.get(path, params, result)
 
 	return
 }
@@ -246,18 +246,18 @@ func (h *Honeybadger) TeamInvitation(teamId, teamInvitationId int) (result *Team
 	return
 }
 
-func (h *Honeybadger) Deploys(projectId int) (result *Deploys, err error) {
+func (h *Honeybadger) Deploys(projectId int, params Params) (result *Deploys, err error) {
 	path := fmt.Sprintf("/projects/%d/deploys", projectId)
 	result = &Deploys{}
-	err = h.get(path, nil, result)
+	err = h.get(path, params, result)
 
 	return
 }
 
-func (h *Honeybadger) Faults(projectId int) (result *Faults, err error) {
+func (h *Honeybadger) Faults(projectId int, params Params) (result *Faults, err error) {
 	path := fmt.Sprintf("/projects/%d/faults", projectId)
 	result = &Faults{}
-	err = h.get(path, nil, result)
+	err = h.get(path, params, result)
 
 	return
 }
@@ -270,10 +270,10 @@ func (h *Honeybadger) Fault(projectId, faultId int) (result *Fault, err error) {
 	return
 }
 
-func (h *Honeybadger) FaultNotices(projectId, faultId int) (result *FaultNotices, err error) {
+func (h *Honeybadger) FaultNotices(projectId, faultId int, params Params) (result *FaultNotices, err error) {
 	path := fmt.Sprintf("/projects/%d/faults/%d/notices", projectId, faultId)
 	result = &FaultNotices{}
-	err = h.get(path, nil, result)
+	err = h.get(path, params, result)
 
 	return
 }
