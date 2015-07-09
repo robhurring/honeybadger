@@ -53,8 +53,9 @@ func main() {
   // get your token on the https://app.honeybadger.io/users/edit page
   token := os.Getenv("HONEYBADGER_API_TOKEN")
   honeybadger := honeybadger.New(token)
+  params := honeybadger.Params{"page": "1"}
 
-  projects, err := honeybadger.Projects()
+  projects, err := honeybadger.Projects(params)
   if err != nil {
     panic(err)
   }
